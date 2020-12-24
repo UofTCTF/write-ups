@@ -25,3 +25,5 @@ function assemble_png(u_in){
     return false;
 }
 ```
+The result array starts with `89 50 4E 47 0D 0A 1A 0A`,
+ends with `00 00 00 00 49 45 4E 44 AE 42 60 82`.
