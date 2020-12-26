@@ -28,7 +28,7 @@ def check_idx(idx: int, value: str):
     flag &= (PNG_HEADER[idx] == BYTES[((shifter * LEN) % len(BYTES)) + idx])
     
     #check the PNG_END
-    # i = idx, j = 3
+    # i = idx, j = chunk_num - 1
     if 3 < idx < 16:
         flag &= (PNG_END[idx - 4] == BYTES[(((bytes_chunk_num - 1 + shifter) * LEN) + idx) % len(BYTES)])
         
