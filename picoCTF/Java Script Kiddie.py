@@ -34,11 +34,11 @@ def check_idx(idx: int, value: str):
         
     return flag
 
-mxlen = 0
+# mxlen = 0
 ans = []
 def dfs(key: List[str]) -> List[str]:
-    global mxlen
-    mxlen = max(mxlen, len(key))
+    # global mxlen
+    # mxlen = max(mxlen, len(key))
 
     assert len(key) < 17
     if len(key) == 16:
@@ -54,12 +54,23 @@ def dfs(key: List[str]) -> List[str]:
 
     return
 
+def assemble_png(key: str):
+    result = [None] * (LEN * bytes_chunk_num)
+    for i in range(0, LEN):
+        shifter = ord(key[i]) - 48
+        for j in range(0, bytes_chunk_num):
+            if (((j + shifter) * LEN) % len(BYTES)) + i > len(BYTES): break
+            result[(j * LEN) + i] = BYTES[(((j + shifter) * LEN) % len(BYTES)) + i]
+
+    return bytearray(result)
+
+
 if __name__ == "__main__":
     with open("Java Script Kiddle.txt", 'r') as f:
         for line in f:
             BYTES.append(int(line.strip()))
             
-    bytes_chunk_num = int(len(BYTES) / 16)
+    bytes_chunk_num = len(BYTES) // LEN
     
     dfs([])
     #print(mxlen)
@@ -71,5 +82,6 @@ if __name__ == "__main__":
 
     os.mkdir("./pngs")
 
-    for res, cnt in ans:
-        print(cnt)
+    for idx in range(0, len(ans)):
+        with open("./pngs/{}.png".format(idx), 'wb') as f:
+            f.write(assemble_png(ans[idx]))
