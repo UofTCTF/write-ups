@@ -29,21 +29,21 @@ def check_idx(idx: int, value: str):
     
     #check the PNG_END
     # i = idx, j = chunk_num - 1
-    if 3 < idx < 16:
-        flag &= (PNG_END[idx - 4] == BYTES[(((bytes_chunk_num - 1 + shifter) * LEN) + idx) % len(BYTES)])
+    # if 3 < idx < 16:
+    #     flag &= (PNG_END[idx - 4] == BYTES[(((bytes_chunk_num - 1 + shifter) * LEN) + idx) % len(BYTES)])
         
     return flag
 
 mxlen = 0
+ans = []
 def dfs(key: List[str]) -> List[str]:
-    ans = []
     global mxlen
     mxlen = max(mxlen, len(key))
 
     assert len(key) < 17
     if len(key) == 16:
-        print("".join(key))
-        ans.append(key)
+        global ans
+        ans.append("".join(key))
         return
     
     for i in range(48, min(122 + 1, 48 + bytes_chunk_num)): # reduce searching range to ascii and number of chucks
@@ -59,11 +59,17 @@ if __name__ == "__main__":
         for line in f:
             BYTES.append(int(line.strip()))
             
-    bytes_chunk_num = int(len(BYTES) / 16);
+    bytes_chunk_num = int(len(BYTES) / 16)
     
     dfs([])
     #print(mxlen)
-    #if len(ans) != 0:
-    #    print("possible answers are: {}".format(ans))
-    #else: print("No answer found")
+    if len(ans) != 0:
+       print("possible answers are: {}".format(ans))
+    else: print("No answer found")
     
+    print("Generating png files...")
+
+    os.mkdir("./pngs")
+
+    for res, cnt in ans:
+        print(cnt)
