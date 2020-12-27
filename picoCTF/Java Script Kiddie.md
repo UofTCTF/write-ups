@@ -43,7 +43,7 @@ Luckly, we know both values. Length of `IHDR` is 13 bytes (the image's width (4 
 
 Thus, the header should always be `0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00, 0x00, 0x00, 0x0D, 0x49, 0x48, 0x44, 0x52`.
 
-I want to also mention why you cannot use `IEND` chunk to calculate your key. Because by definition, ; the data field of the `IEND` chunk can has 0 bytes. Thus, we don't know exactly where `IEND` chunk is until we have calculated out the key.
+I want to also mention why you cannot use `IEND` chunk to calculate your key. Because by definition, the data field of the `IEND` chunk can has 0 bytes. Thus, we don't know exactly where `IEND` chunk is until we have calculated out the key. This means we cannot use `IEND` chunk to check the correctness of the key.
 
 For example, these are the end bytes in my result png file:
 
