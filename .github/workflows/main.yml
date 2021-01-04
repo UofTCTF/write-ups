@@ -40,7 +40,7 @@ jobs:
           $headers.Add("Content-Type", "application/json")
 
           $body = "{
-            `"event_type`": `"test-repository-dispatch`",
+            `"event_type`": `"trigger-from-writeups-repo`",
             `"client_payload`": {
               `"unit`": false,
               `"integration`": true
