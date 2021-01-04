@@ -1,3 +1,10 @@
+---
+title: "where-are-the-robots"
+date: "2020-12-21"
+author: "RealFakeAccount"
+description: "https://play.picoctf.org/practice/challenge/4?category=1&page=1"
+---
+
 Robots is an explict hint.
 
 [Introduction to robots.txt](https://developers.google.com/search/docs/advanced/robots/intro)

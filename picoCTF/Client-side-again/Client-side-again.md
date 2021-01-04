@@ -1,8 +1,14 @@
+---
+title: "Client-side-again"
+date: "2020-12-21"
+author: "RealFakeAccount"
+description: "https://play.picoctf.org/practice/challenge/69?category=1&page=1"
+---
 You can find a embedded script in the HTML source:
 
 The following js code is formatted using <https://beautifier.io/>
 
-*Note that this website will delete the declaration of _0x5a46 by default*
+*Note that this js formatting website will delete the declaration of _0x5a46 by default*
 
 ```javascript
 var _0x5a46 = ["f49bf}", "_again_e", "this", "Password Verified", "Incorrect password", "getElementById", "value", "substring", "picoCTF{", "not_this"];

@@ -1,3 +1,9 @@
+---
+title: "picobrowser"
+date: "2020-12-22"
+author: "RealFakeAccount"
+description: "https://play.picoctf.org/practice/challenge/9?category=1&page=1"
+---
 Use your favorite methods to change the request header.
 
 1.  use proxy tools such as Burp Suite, Wireshark, Fiddler, etc.

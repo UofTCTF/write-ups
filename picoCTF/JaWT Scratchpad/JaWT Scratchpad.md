@@ -1,3 +1,9 @@
+---
+title: "JaWT-Scratchpad"
+date: "2020-12-26"
+author: "RealFakeAccount"
+description: "https://play.picoctf.org/practice/challenge/25?category=1&page=2"
+---
 This is a learning-solving question.
 
 Both website and hint tell us to look up JWT. 

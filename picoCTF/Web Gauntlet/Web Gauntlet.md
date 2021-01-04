@@ -1,3 +1,9 @@
+---
+title: "Web-Gauntlet"
+date: "2020-12-22"
+author: "RealFakeAccount"
+description: "https://play.picoctf.org/practice/challenge/88?category=1&page=1"
+---
 Put any username and password and you can see the SQL query.
 
 <http://jupiter.challenges.picoctf.org:19593/filter.php> tells us which words is banned.

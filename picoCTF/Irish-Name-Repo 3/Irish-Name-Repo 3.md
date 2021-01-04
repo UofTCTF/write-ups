@@ -1,3 +1,9 @@
+---
+title: "Irish-Name-Repo-3"
+date: "2020-12-26"
+author: "RealFakeAccount"
+description: "https://play.picoctf.org/practice/challenge/8?category=1&page=1"
+---
 Reading through the question. They remove the `username` field. Moreover, we can't see the sql query now.
 
 After a few failed attempts, we know that we have to look for some information.

@@ -1,3 +1,9 @@
+---
+title: "Insp3ct0r"
+date: "2020-12-21"
+author: "RealFakeAccount"
+description: "https://play.picoctf.org/practice/challenge/18?category=1&page=1"
+---
 The description said we should inspect the website code.
 
 Press F12, in the elements with `id="tababout"` attribute, you can find the following:
