@@ -48,4 +48,4 @@ jobs:
           }"
 
           $response = Invoke-RestMethod -Uri $uri -Headers $headers -Body $body -Method POST
-          $response | ConvertTo-Jsonv
+          $response | ConvertTo-Json
