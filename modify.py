@@ -1,6 +1,6 @@
 import os
 
-path = "/home/rfaccount/ctf/uoftctf.org/content/posts/write-ups/picoCTF"
+path = "/home/rfaccount/ctf/write-ups/picoCTF"
 
 
 dirname = [f for f in os.listdir(path) if not f.endswith("py")]
@@ -21,23 +21,25 @@ for mdpath in md_file_path:
 for key in md_file:
     value = md_file[key]
     for i, line in enumerate(value):
-        if line.startswith("+++"):
-            value[i] = '---\n'
-        if line.startswith("title = "):
-            value[i] = line.replace("title = ", "title: ")
-        if line.startswith("title: "):
-            value[i] = line[:7] + '-'.join(line[7:].split(' '))
-        if line.startswith("date = "):
-            value[i] = line.replace("date = ", "date: ")
-        if line.startswith("author = "):
-            value[i] = line.replace("author = ", "author: ")
-        if line.startswith("description = "):
-            value[i] = line.replace("description = ", "description: ")
-        print(value[i])
+        # if line.startswith("+++"):
+        #     value[i] = '---\n'
+        # if line.startswith("title = "):
+        #     value[i] = line.replace("title = ", "title: ")
+        # if line.startswith("title: "):
+        #     value[i] = line[:7] + '-'.join(line[7:].split(' '))
+        # if line.startswith("date = "):
+        #     value[i] = line.replace("date = ", "date: ")
+        # if line.startswith("author = "):
+        #     value[i] = line.replace("author = ", "author: ")
+        # if line.startswith("description = "):
+        #     value[i] = line.replace("description = ", "description: ")
+        if line.startswith("description: "):
+            print(line[:line.find("?category")])
+            value[i] = line[:line.find("?category")] + '\n'
+            print(value[i])
 
 for path in md_file:
     value = md_file[path]
     print(path)
-    print(value)
     with open(path, 'w') as f:
         f.writelines(value) 

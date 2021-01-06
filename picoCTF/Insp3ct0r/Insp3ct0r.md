@@ -2,7 +2,7 @@
 title: "Insp3ct0r"
 date: "2020-12-21"
 author: "RealFakeAccount"
-description: "https://play.picoctf.org/practice/challenge/18?category=1&page=1"
+description: "https://play.picoctf.org/practice/challenge/18
 ---
 The description said we should inspect the website code.
 

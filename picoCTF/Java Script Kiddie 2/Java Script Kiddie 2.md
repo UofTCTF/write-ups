@@ -2,7 +2,7 @@
 title: "Java-Script-Kiddie2"
 date: "2020-12-27"
 author: "RealFakeAccount"
-description: "https://play.picoctf.org/practice/challenge/33?category=1&page=2"
+description: "https://play.picoctf.org/practice/challenge/33
 ---
 ```js
 
