@@ -35,7 +35,7 @@ for key in md_file:
         #     value[i] = line.replace("description = ", "description: ")
         if line.startswith("description: "):
             print(line[:line.find("?category")])
-            value[i] = line[:line.find("?category")] + '\n'
+            value[i] = line[:line.find("?category")] + '"\n'
             print(value[i])
 
 for path in md_file:

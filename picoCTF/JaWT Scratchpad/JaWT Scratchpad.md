@@ -2,7 +2,7 @@
 title: "JaWT-Scratchpad"
 date: "2020-12-26"
 author: "RealFakeAccount"
-description: "https://play.picoctf.org/practice/challenge/25
+description: "https://play.picoctf.org/practice/challenge/25"
 ---
 This is a learning-solving question.
 

@@ -2,7 +2,7 @@
 title: "Java-Script-Kiddie"
 date: "2020-12-23"
 author: "RealFakeAccount"
-description: "https://play.picoctf.org/practice/challenge/29
+description: "https://play.picoctf.org/practice/challenge/29"
 ---
 ```js
 var bytes = [];

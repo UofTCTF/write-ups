@@ -2,7 +2,7 @@
 title: "dont-use-client-side"
 date: "2020-12-21"
 author: "RealFakeAccount"
-description: "https://play.picoctf.org/practice/challenge/66
+description: "https://play.picoctf.org/practice/challenge/66"
 ---
 You can find a embedded script in the HTML source:
 

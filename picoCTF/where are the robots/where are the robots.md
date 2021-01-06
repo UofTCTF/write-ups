@@ -2,7 +2,7 @@
 title: "where-are-the-robots"
 date: "2020-12-21"
 author: "RealFakeAccount"
-description: "https://play.picoctf.org/practice/challenge/4
+description: "https://play.picoctf.org/practice/challenge/4"
 ---
 
 Robots is an explict hint.

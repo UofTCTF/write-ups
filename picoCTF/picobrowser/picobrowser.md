@@ -2,7 +2,7 @@
 title: "picobrowser"
 date: "2020-12-22"
 author: "RealFakeAccount"
-description: "https://play.picoctf.org/practice/challenge/9
+description: "https://play.picoctf.org/practice/challenge/9"
 ---
 Use your favorite methods to change the request header.
 

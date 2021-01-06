@@ -2,7 +2,7 @@
 title: "Open-to-admins"
 date: "2020-12-22"
 author: "RealFakeAccount"
-description: "https://play.picoctf.org/practice/challenge/1
+description: "https://play.picoctf.org/practice/challenge/1"
 ---
 Note that the "time" in this question is not the max-age of cookies.
 

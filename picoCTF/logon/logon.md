@@ -2,7 +2,7 @@
 title: "logon"
 date: "2020-12-21"
 author: "RealFakeAccount"
-description: "https://play.picoctf.org/practice/challenge/46
+description: "https://play.picoctf.org/practice/challenge/46"
 ---
 This website gives us username and password. Looks like a SQL injection question.
 

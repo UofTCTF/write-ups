@@ -2,7 +2,7 @@
 title: "Web-Gauntlet"
 date: "2020-12-22"
 author: "RealFakeAccount"
-description: "https://play.picoctf.org/practice/challenge/88
+description: "https://play.picoctf.org/practice/challenge/88"
 ---
 Put any username and password and you can see the SQL query.
 

@@ -2,7 +2,7 @@
 title: "Irish-Name-Repo-3"
 date: "2020-12-26"
 author: "RealFakeAccount"
-description: "https://play.picoctf.org/practice/challenge/8
+description: "https://play.picoctf.org/practice/challenge/8"
 ---
 Reading through the question. They remove the `username` field. Moreover, we can't see the sql query now.
 
