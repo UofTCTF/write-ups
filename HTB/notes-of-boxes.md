@@ -1,6 +1,6 @@
 ---
 title: "Notes of HTB Machine Labs"
-date: "2021-5-12"
+date: "2021-05-12"
 author: "RealFakeAccount"
 description: "short notes for HTB Machine Lab"
 ---
