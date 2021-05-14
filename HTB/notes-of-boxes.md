@@ -101,3 +101,29 @@ ftp> ls -a
 - what I learnt
 
 1. Use `grep -B5 -A5 pattern` to quick extract the context.
+
+### Granny
+
+- short write-ups
+
+Experience some strange issues using metasploit 6.0.43. MS14-058 wouldn't work. Will come back later.
+
+- what I learnt
+
+1. local_exploit_suggester in metasploit could suggest exploit.
+
+### Bashed
+
+- short write-ups
+
+Use enumeration (Wfuzz or gobuster, for example) to find the location of the php reverse shell that mentioned in the box's website, then notice that sudo allows you to run as another user, so generate a reverse shell and start bash as the new user. Next, find that the root use crontab to execute the scripts of the new user. Modify the scripts to get a shell as root.
+
+- what I learnt
+
+1. <https://github.com/rebootuser/LinEnum> is a good way to quickly explore interesting file in Linux
+2. `-s` option of sudo could start an interaction shell. However, it requires password. Use `sudo -u user /bin/bash` instead.
+3. CherryTree is a good way to organize information
+
+### ScriptKiddie
+
+Finished. Waiting for retirement.
