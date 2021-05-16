@@ -124,6 +124,12 @@ Use enumeration (Wfuzz or gobuster, for example) to find the location of the php
 2. `-s` option of sudo could start an interaction shell. However, it requires password. Use `sudo -u user /bin/bash` instead.
 3. CherryTree is a good way to organize information
 
+### Optimum
+
+- short write-ups
+
+metasploit all the way down.
+
 ### ScriptKiddie
 
 Finished. Waiting for retirement.
