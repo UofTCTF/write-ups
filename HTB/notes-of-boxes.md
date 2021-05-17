@@ -133,3 +133,17 @@ metasploit all the way down.
 ### ScriptKiddie
 
 Finished. Waiting for retirement.
+
+### Blocky
+
+- short write-ups
+
+gobuster could find a /wiki page and a /plugins page, which indicates the files in /plugins may be important. RE the jar file found in the /plugins gives us a password. Notice that althought this password have a username of `root`, it is actually `notch`'s. Notch got sudo privilege and we got his password, thus we can get root shell using sudo.
+
+- what I learnt
+
+1. Don't dig too deep into one finding. Do a throughout information first.
+
+### Delivery
+
+Finished. Waiting for retirement.
