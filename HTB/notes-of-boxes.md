@@ -165,3 +165,7 @@ Finished. Waiting for retirement.
 - what I learnt
 
 1. `chmod +s` makes the file run as the user/group who created it.
+
+### Armageddon
+
+Finished. Waiting for retirement.
