@@ -169,3 +169,13 @@ Finished. Waiting for retirement.
 ### Armageddon
 
 Finished. Waiting for retirement.
+
+### Mirai
+
+- short write-ups
+
+Gobuster can find the admin panel. The login page will inform you that this is a newly installed raspberry-pi. Use the default login credentials to login through ssh and get user flag. Finally use `strings` to find the root flag.
+
+- what I learnt
+
+1. disks could be directly `cat`ed as binary. For example, you could `cat /dev/sda`.
