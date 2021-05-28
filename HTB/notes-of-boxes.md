@@ -193,3 +193,37 @@ Root: user could run perl as root. Use perl to spawn a reverse shell.
 1. `gobuster` has a very strange issue. it won't automatically add / after wordlist. Thus in this machine, you can't get the `/cgi-bin/` dir using `gobuster`. `/cgi-bin/` is 403 while `/cgi-bin` is 404.
 
 2. ShellShock
+
+### Sense
+
+- short write-ups
+
+User: there is a file `system-users.txt` tells you the username. Use the default pfsense password to login. Then use CVE to get reverse shell.
+
+Root: reverse shell runs as root.
+
+- what I learnt
+
+1. if you stucked, buster the dir with common file extension (txt, php, pl, py, etc)
+
+### Beep
+
+- short write-ups
+
+User: the webapp `elastix` had a LFI CVE. Use it to extract the config file. It contains the root passwd for ssh.
+
+Root: reverse shell runs as root.
+
+btw, other ways are possible for this machine. For example, this machine is vulnerable to shellshock.
+
+### Nibbles
+
+- short write-ups
+
+User: find nibbleblog and its admin panel. `guess` the password `nibbles` and login as admin (lol). Use CVE to get shell.
+
+Root: user could run all command as root using sudo.
+
+- what I learnt
+
+1. Often, if HTB wants you to guess passwords, it is usually machine name, `password`, `admin`.
