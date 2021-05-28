@@ -179,3 +179,17 @@ Gobuster can find the admin panel. The login page will inform you that this is a
 - what I learnt
 
 1. disks could be directly `cat`ed as binary. For example, you could `cat /dev/sda`.
+
+### Shocker
+
+- short write-ups
+
+User: shellshock
+
+Root: user could run perl as root. Use perl to spawn a reverse shell.
+
+- what I learnt
+
+1. `gobuster` has a very strange issue. it won't automatically add / after wordlist. Thus in this machine, you can't get the `/cgi-bin/` dir using `gobuster`. `/cgi-bin/` is 403 while `/cgi-bin` is 404.
+
+2. ShellShock
