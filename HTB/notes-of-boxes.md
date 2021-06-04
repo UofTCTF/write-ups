@@ -227,3 +227,21 @@ Root: user could run all command as root using sudo.
 - what I learnt
 
 1. Often, if HTB wants you to guess passwords, it is usually machine name, `password`, `admin`.
+
+### Buff
+
+- short write-ups
+
+User: The website uses unpatched framework. Use script from searchsploit to get shell.
+
+Root: Find there is a vulnerable service `CloudMe`. Use script from searchsploit to get shell.
+
+- what I learnt
+
+1. if the target don't have ssh and you need a tunnel, `chisel` is a good choice.
+
+2. Use `netstat -an` to see the open ports and use `tasklist /v | findstr <portnumber>` to check the process using the port
+
+3. About `msfvenom` payloads: `windows/meterpreter_reverse_tcp` is a quite large reverse shell, while ` windows/meterpreter/reverse_tcp` contains just enough code to connect back to the attacker.
+
+4. If you want to check the privilege of one process, you can use [accesschk](https://docs.microsoft.com/en-us/sysinternals/downloads/accesschk).
