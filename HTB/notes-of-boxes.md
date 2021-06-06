@@ -239,6 +239,11 @@ Root: Find there is a vulnerable service `CloudMe`. Use script from searchsploit
 - what I learnt
 
 1. if the target don't have ssh and you need a tunnel, `chisel` is a good choice.
+    Simple usage: 
+    ```bash
+    server(attack box): ./chisel server -p 8000 --reverse
+    client(victim box): ./chisel client 10.10.14.20:8000 R:port:localhost:port
+    ```
 
 2. Use `netstat -an` to see the open ports and use `tasklist /v | findstr <portnumber>` to check the process using the port
 
@@ -258,14 +263,12 @@ Root: 2 ways. Either add a new credential in `/etc/passwd`, or use `/var/htb/bin
 
 1. In bash, single quote wouldn't inteprete anything while double quote would. So if you want to echo something contain special character ($ for example), use single quote.
 
-2. You can use `find -perm -mode` or `find -perm /mode` to [find files with given permission](https://askubuntu.com/questions/829716/diffrence-between-perm-mode-perm-mode-in-find-command). In this question, use
 
+2. You can use openssl to [generate hash](https://unix.stackexchange.com/questions/81240/manually-generate-password-for-etc-shadow) for [/etc/shadow](https://www.cyberciti.biz/faq/understanding-etcpasswd-file-format/). In exploit, `-1` is usually enough (which is a MD5).
+
+
+3. You can use `find -perm -mode` or `find -perm /mode` to [find files with given permission](https://askubuntu.com/questions/829716/diffrence-between-perm-mode-perm-mode-in-find-command). In this question, use
 ```bash
 find / -type f -user root -perm -4000 2>/dev/null
 ```
-
 to find the emergency file.
-
-3. You can use openssl to [generate hash](https://unix.stackexchange.com/questions/81240/manually-generate-password-for-etc-shadow) for [/etc/shadow](https://www.cyberciti.biz/faq/understanding-etcpasswd-file-format/). In exploit, `-1` is usually enough (which is a MD5).
-
-
