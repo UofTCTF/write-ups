@@ -245,3 +245,27 @@ Root: Find there is a vulnerable service `CloudMe`. Use script from searchsploit
 3. About `msfvenom` payloads: `windows/meterpreter_reverse_tcp` is a quite large reverse shell, while ` windows/meterpreter/reverse_tcp` contains just enough code to connect back to the attacker.
 
 4. If you want to check the privilege of one process, you can use [accesschk](https://docs.microsoft.com/en-us/sysinternals/downloads/accesschk).
+
+### Bank
+
+- short write-ups
+
+Users: set hosts file to `bank.htb` based on info from port 53. use Buster to find `/balance-transfer/`. One file in this folder didn't encrypt. Use the credential in this file to login the panel. the source code of the panel tell us we can upload a php use `.htb` suffix. Upload one and get a user shell.
+
+Root: 2 ways. Either add a new credential in `/etc/passwd`, or use `/var/htb/bin/emergency`, which directly give you a root shell..
+
+- what I learnt
+
+1. In bash, single quote wouldn't inteprete anything while double quote would. So if you want to echo something contain special character ($ for example), use single quote.
+
+2. You can use `find -perm -mode` or `find -perm /mode` to [find files with given permission](https://askubuntu.com/questions/829716/diffrence-between-perm-mode-perm-mode-in-find-command). In this question, use
+
+```bash
+find / -type f -user root -perm -4000 2>/dev/null
+```
+
+to find the emergency file.
+
+3. You can use openssl to [generate hash](https://unix.stackexchange.com/questions/81240/manually-generate-password-for-etc-shadow) for [/etc/shadow](https://www.cyberciti.biz/faq/understanding-etcpasswd-file-format/). In exploit, `-1` is usually enough (which is a MD5).
+
+
