@@ -281,3 +281,15 @@ User: Nodejs deserialization exploit. <https://opsecx.com/index.php/2017/02/08/e
 
 Root: Notice the `script.py` in /home/sun/Documents is crontabed by root. Modify it to generate a reverse shell from root.
 
+
+### Valentine
+
+- short write-ups
+
+User: gobuster finds `/dev` folder. You can find a rsa key there encoded in Hex with a username `hype` (since the file name is `hype_key`). Nmap vuln script tells us the website is vulnerable to `heartbleed`. Use scripts from searchsploit and find a base64 string, which after decode is the password of the rsa key. Use `hype` with the rsa key to ssh into the machine.
+
+Root: `.bash_history` is not empty this time. Notice `tmux` is used based on the history. Go to the socket file and connect it to get root access.
+
+- what I learnt
+
+1. You should run `--script vuln` for each box.
