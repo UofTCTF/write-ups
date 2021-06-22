@@ -293,3 +293,11 @@ Root: `.bash_history` is not empty this time. Notice `tmux` is used based on the
 - what I learnt
 
 1. You should run `--script vuln` for each box.
+
+### Poison
+
+- short write-ups
+
+User: when selecting `listfiles.php` (suggested by the website), you can see a `pwdbackup.txt`. Select this file instead and find a base64. Decode 13 times to get the password. Then ssh into the machine.
+
+Root: Check the runnning process so you can find `VNC` is running as root. Use ssh to proxy the port and connect to VNC to gain root access.
