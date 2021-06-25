@@ -301,3 +301,18 @@ Root: `.bash_history` is not empty this time. Notice `tmux` is used based on the
 User: when selecting `listfiles.php` (suggested by the website), you can see a `pwdbackup.txt`. Select this file instead and find a base64. Decode 13 times to get the password. Then ssh into the machine.
 
 Root: Check the runnning process so you can find `VNC` is running as root. Use ssh to proxy the port and connect to VNC to gain root access.
+
+
+### Tenten
+
+- short write-ups
+
+ > Comment: Although it seems a bit complicated, the path is pretty straight. 
+
+User: use `wpscan` to find a vulnerable plugin -- `job-manager`. Also find we can enumerate the submitted jobs apply page (http://10.10.10.10/index.php/jobs/apply/_enumerate_/). On the 13th page we can find it has a title called _HackerAccessGranted_. Enumerate this name with the vulnerability we found earlier and gives us a png. Use `steghide` to extract a rsa key, and cracked using `john`. Then login using ssh with this key.
+
+Root: sudo tells us we can run `/bin/fuckin` without password. Check the file and find that "All it does is run the first arg, passing the second, third, and forth args in as args". Therefore, `sudo fuckin /bin/bash` could give us password.
+
+- what I learnt
+
+1. `steghide`
