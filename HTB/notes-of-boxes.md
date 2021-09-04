@@ -330,3 +330,22 @@ So, <https://0xdf.gitlab.io/2019/09/14/htb-luke.html>
 1. HTTP OPTION for guessing the API type
 
 2. wfuzz advance usage
+
+### Cronos
+- short write-ups
+
+User: nmap tells us port 53 is open. Use `nslookup` to find the base domain `cronos.htb`, and use `dig` to make a `zone transfer`, which tells us `admin.cronos.htb`.
+
+Then is the SQL injection. Strangely `sqlmap` doesn't work. But another tool called [DSSS](https://github.com/stamparm/DSSS) worked. You can also try manually.
+
+In the admin page, you can easily guess there is a command injection. 
+
+Root:
+
+`Linpeas` tells us `/var/www/laravel/artisan` is being executed by root's crontab. Poison it to get root shell.
+
+- what I learnt:
+
+1. [DSSS](https://github.com/stamparm/DSSS)
+
+
