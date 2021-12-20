@@ -102,7 +102,7 @@ Google for more information.
 > You find the page that rely on `products` database has sql injection vulnerability, but you want to retrieve data from `credentials` database.
 > You have known that the `credentials` database contains two tables: `username` and `password`.
 
-Union attack is very useful when you need to [Retrieving data from other databases](#Retrieving-data-from-other-databases).
+Union attack is very useful when you need to [Retrieving data from other databases](#retrieving-data-from-other-databases).
 `UNION` is a SQL keyword that allows you to combine two or more SQL queries. For more details, see <https://www.w3schools.com/sql/sql_union.asp>
 
 However, there's a few limits to using `UNION`. 
@@ -148,7 +148,7 @@ But since we need to retrieve data instead of getting the query right, we need s
 
 #### Find a specify datatype among columns
 
-Use [Null keyword method](#Bypass-limit-1:-the-the-datatype) to find your desired datatype.
+Use [Null keyword method](#bypass-limit-1:-the-the-datatype) to find your desired datatype.
 
 Let's say you want to find the string column of the original query.
 
@@ -185,7 +185,7 @@ There are two common ways to do that:
 
 #### Use NULL keyword
 
-Since `NULL` is [compatible with any datatype](#Bypass-limit-1:-the-the-datatype), we can increase the number of `NULL`s each turn and see if the query is valid.
+Since `NULL` is [compatible with any datatype](#bypass-limit-1:-the-the-datatype), we can increase the number of `NULL`s each turn and see if the query is valid.
 
 Let's say the original query is:
 ```sql
@@ -278,11 +278,12 @@ We can use following query to get the sql engine version:
 
 After we know the sql engine version, we can query the contents based on following table.
 
----|---|---
-Oracle | SELECT * FROM all_tables |SELECT * FROM all_tab_columns WHERE table_name = 'TABLE-NAME-HERE'
-Microsoft | SELECT * FROM information_schema.tables | SELECT * FROM information_schema.columns WHERE table_name = 'TABLE-NAME-HERE'
-PostgreSQL | SELECT * FROM information_schema.tables | SELECT * FROM information_schema.columns WHERE table_name = 'TABLE-NAME-HERE'
-MySQL | SELECT * FROM information_schema.tables | SELECT * FROM information_schema.columns WHERE table_name = 'TABLE-NAME-HERE'
+|Engine|Query|
+|---|---|---|
+|Oracle | SELECT * FROM all_tables |SELECT * FROM all_tab_columns WHERE table_name = 'TABLE-NAME-HERE'|
+|Microsoft | SELECT * FROM information_schema.tables | SELECT * FROM information_schema.columns WHERE table_name = 'TABLE-NAME-HERE'|
+|PostgreSQL | SELECT * FROM information_schema.tables | SELECT * FROM information_schema.columns WHERE table_name = 'TABLE-NAME-HERE'|
+|MySQL | SELECT * FROM information_schema.tables | SELECT * FROM information_schema.columns WHERE table_name = 'TABLE-NAME-HERE'|
 
 If you cannot select everything, you can google for the column names in these default tables and select those you needed.
 
@@ -300,13 +301,13 @@ In order to retrive informations from `credentials`, we need to:
 
 1. find the table name and column name you want to retrieve.
 
-See [Bypass limit 3: the table name and the column name](#Bypass-limit-3:-the-table-name-and-the-column-name) for details.
+See [Bypass limit 3: the table name and the column name](#bypass-limit-3:-the-table-name-and-the-column-name) for details.
 
 Let's assume our desired database name is `credentials` and the desired column names are `username` and `password`.
 
 2. find the column number of the `SELECT`.
 
-We can apply what we learnt in [Bypass limit 2](#Bypass-limit-2:-the-column-numbers) 
+We can apply what we learnt in [Bypass limit 2](#bypass-limit-2:-the-column-numbers) 
 
 Assume we find the column number of `SELECT` is 2. Insert this information into the original query, we get:
 SELECT _what_,_what_ FROM _something_ WHERE _something_ = '$_GET['user_select']'.
@@ -316,7 +317,7 @@ SELECT _what_,_what_ FROM _something_ WHERE _something_ = '$_GET['user_select']'
 We can safely assume the datatype of the `username` and `password` are char.
 So we need to find which column in the original query is char.
 
-Apply what we learnt in [Find a specify datatype among columns](#Find-a-specify-datatype-among-columns) here.
+Apply what we learnt in [Find a specify datatype among columns](#find-a-specify-datatype-among-columns) here.
 
 If only one column has the desired datatype but you have multiple column to retrieve, use `||` or `+` to concatenate the string as stated above.
 
@@ -344,11 +345,15 @@ The returned table, if we are lucky, will contain the username and password.
 ## Knowledge
 
 [SQL Cheatsheet by protswigger](https://portswigger.net/web-security/sql-injection/cheat-sheet)
+
 [SQL injection Tutorial](https://portswigger.net/web-security/sql-injection)
+
 [Blind injection](https://portswigger.net/web-security/sql-injection/blind)
 
 ## Practice
 
 [SQL injection Tutorial](https://portswigger.net/web-security/sql-injection)
+
 [SQLi labs](https://github.com/Audi-1/sqli-labs)
+
 [picoCTF](https://play.picoctf.org/practice)
