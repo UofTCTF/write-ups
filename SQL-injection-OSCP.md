@@ -266,12 +266,12 @@ In order to find which method we need to get those names, we first need to get o
 #### getting the sql engine version
 
 We can use following query to get the sql engine version:
-
----|---
-Oracle | SELECT banner FROM v$version
-Microsoft SQL Server | SELECT @@version
-MySQL | SELECT @@VERSION
-PostgreSQL | SELECT version()
+|Engine|Query|
+|---|---|
+|Oracle | SELECT banner FROM v$version|
+|Microsoft SQL Server | SELECT @@version|
+|MySQL | SELECT @@VERSION|
+|PostgreSQL | SELECT version()|
 
 
 #### getting database contents
