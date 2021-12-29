@@ -1,6 +1,6 @@
 ---
 title: "Notes of HTB Machine Labs"
-date: "2021-05-12"
+date: "2021-12-28"
 author: "RealFakeAccount"
 description: "short notes for HTB Machine Lab"
 ---
@@ -349,3 +349,32 @@ Root:
 1. [DSSS](https://github.com/stamparm/DSSS)
 
 
+### Horizontall
+- short write-ups
+
+User: fuzz subdomains to find the api page `api-prod.horizontall.htb`. Run a directory fuzz on this page to find the `strapi` page. Google and you should find exploit for this.
+
+Root: Enum the box and find port 8000 is open. Proxy into your VM and find this is Laravel framework. Google and you should find PE exploit.
+
+- what I learnt:
+
+1. Focus on processes and ports in enum.
+
+### Previse
+- short write-ups
+
+User: fuzz directory and find some php. Among them, the only one you could visit is `nav.php`, which list a few links that will redirect you to main page. Check the network traffic and find that your browser redirect to main page after receive all the original data. Therefore, intercept the response and modify the HTTP status code from 302 to 200 to visit the forbidden pages.
+
+Then register a new account from a forbidden page. You can download the source of the whole website after login. Read the source code and find the author uses `exec` to generate delimiter in log. Intercept the request and modify the `delim` with your malicious code to get `www-data` shell.
+
+Another information you can find in the source code is the database credentials. Use it to log in the database and get user name password hash. Use `john-the-ripper` and mode `md5-crypt` together with `rockyou` wordlist to crack the hash.
+
+With username `m4lwhere` and the password you cracked, you can ssh as user.
+
+Root: enum and find you can run a certain script with sudo. The key is in the script, the `gzip` and `date` is determined by local PATH rather than using absolute path. Use `path injection` to get root shell.
+
+- what I learnt:
+
+1. path injection as PE vector
+
+2. sometimes server send you the forbidden page, but your browser will redirect to the main page because of the status code. Always check the response size to make sure you don't miss anything.
