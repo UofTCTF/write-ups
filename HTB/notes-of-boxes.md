@@ -378,3 +378,26 @@ Root: enum and find you can run a certain script with sudo. The key is in the sc
 1. path injection as PE vector
 
 2. sometimes server send you the forbidden page, but your browser will redirect to the main page because of the status code. Always check the response size to make sure you don't miss anything.
+
+### Driver
+
+It's surely a bit hard if you don't know the basic of SMB relay attacks.
+Before get into the walkthrough, watch this if you don't know anything about SMB relay attacks. 
+
+[Jonathan Brossard &  Hormazd Billimoria, blackhat 2015](https://www.youtube.com/watch?v=a1dgOO9bALA)
+
+- short write-ups
+
+User: First look at port 80. It requires authentication, but it has a weak credential (`admin:admin`). A few guess could get it. 
+Also notice that port 5985 is open. Google tells us this could be used by us if we got credentials ([evil-winrm](https://github.com/Hackplayers/evil-winrm)). 
+We can phish the credential using SMB. Follow this: [SMB Share – SCF File Attacks](https://pentestlab.blog/2017/12/13/smb-share-scf-file-attacks/)
+
+crack the hash to get credentials, use `evil-winrm` to login.
+
+Root: The hint is very obvious: printer. Use `printernightmare` to get root shell. You can check this blog: [Playing with PrintNightmare](https://0xdf.gitlab.io/2021/07/08/playing-with-printnightmare.html)
+
+- what I learnt:
+
+1. printer nightmare exploit.
+
+2. Although it has been said many times, take notes about what you need and what you can get from one vector.
