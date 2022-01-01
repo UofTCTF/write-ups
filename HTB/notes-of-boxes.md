@@ -409,7 +409,7 @@ Root: The hint is very obvious: printer. Use `printernightmare` to get root shel
 User: We have a document and source codes of the website. Examine the source code and we can find a RCE in `private.js`. In order to access it, we need to access `secret.htb:3000/logs`, and we need a jwt token to access `/logs`. Normal user's jwt can be generated using register and login function of api, as documented. We can find the admin's name and email in the source code. Now the only thing left is to find the jwt's secret or find a way to bypass it. Sadly the common `None` encryption method does not work here.
 
 We find in `.env` of the source code that the secret is `secret`. However, this does not work. Examine the history version of this file to find the true secret. 
-Login using the tempted version of the jwt as `theadmin`, and use RCE to get shell as user.
+Login using the tamper version of the jwt as `theadmin`, and use RCE to get shell as user.
 
 Root: I'll come back after I have more pwn experience.
 
