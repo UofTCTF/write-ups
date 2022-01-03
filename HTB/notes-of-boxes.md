@@ -437,3 +437,8 @@ Root: on `/`, there's a special folder called `/reports`. Google and find this i
 1. Brute force is your last resort, but remember to use it.
 
 2. Sometimes on LFI point of attack, the victim code will check certain keywords. If you didn't make it work at the first try, maybe try a few more times and try to include original keywords.
+
+### Silo
+
+Weirdly, with instantclient 21.4 and odat 5.1, the file upload is not working.
+
