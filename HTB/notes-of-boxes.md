@@ -442,3 +442,18 @@ Root: on `/`, there's a special folder called `/reports`. Google and find this i
 
 Weirdly, with instantclient 21.4 and odat 5.1, the file upload is not working.
 
+### Bounty
+
+- short write-ups
+
+User: fuzz leads us to `/transfer.aspx` and `uoloadedFiles`. Based on [Hacktricks](https://book.hacktricks.xyz/pentesting/pentesting-web/iis-internet-information-services#execute-.config-files), we can try to upload .config files and including our asp shell code. 
+
+Upload it with your code and get shell. One thing to note is that the user `Desktop` folder shows nothing when using `ls`. You need to use `ls -Force` to show hidden files.
+
+Root: Notice that there are no hotpatch applied using `systeminfo`. So basically anything would work. I use [juicy potato](https://github.com/ohpe/juicy-potato) here.
+
+- what I learnt:
+
+1. Always check hacktricks is a good habit after enumeration.
+
+2. make better use of `nishang` and `hacktricks`
