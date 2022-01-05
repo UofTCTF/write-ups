@@ -457,3 +457,24 @@ Root: Notice that there are no hotpatch applied using `systeminfo`. So basically
 1. Always check hacktricks is a good habit after enumeration.
 
 2. make better use of `nishang` and `hacktricks`
+
+### SolidState
+
+> Unlike many underrated easy box, this one is an overrated medium box.
+> But this box is pretty fun. The emails inside reminds me of this game: <https://store.steampowered.com/app/365450/Hacknet/>
+
+- short write-ups
+
+User: fuzz didn't give us anything. Focus on nmap, we see port 4555 is open, together with some mail server. A bit google allows us to find the [exploit of port 4555 (james)](https://www.exploit-db.com/exploits/50347).
+
+We see the exploit needs ssh login. Sadly, this box doesn't have automatic ssh login.
+
+Continue enum. Find that telnet to Apache James Server with default credentials we can do some change to credentials. Change user's credentials one by one and login to POP3 and see if they got any emails. You can find mindy's credential in her emails.
+
+Login as ssh user, and you find you are limited by rbash. You can either 1. use the exploit above 2. bypass it following [this guide](https://www.exploit-db.com/docs/english/44592-linux-restricted-shell-bypass-guide.pdf).
+
+Root: Run Pspy and find /opt/tmp.py is being executed constantly by root. Modify it to get reverse shell.
+
+- what I learnt:
+
+1. Pspy <https://github.com/DominicBreuker/pspy>
