@@ -478,3 +478,5 @@ Root: Run Pspy and find /opt/tmp.py is being executed constantly by root. Modify
 - what I learnt:
 
 1. Pspy <https://github.com/DominicBreuker/pspy>
+
+2. The theory of this exploit is amazing! check [this blog from 0xdf](https://0xdf.gitlab.io/2020/04/30/htb-solidstate.html#intended-path). Basically, because there's no path bounds check in James, we can write an email into abritrary folder. The author write malicious email into `/etc/bash_completion.d`, and since files in this folder will be executed whenever user login, we can get our shell after user login.
