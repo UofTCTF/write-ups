@@ -1,15 +1,15 @@
 ---
-title: "Notes of pwn.college babysuid levels"
+title: "Notes of pwn.college babysuid&embryoasm levels"
 date: "2022-01-04"
 author: "uoft-flyfreejay"
-description: "short notes for pwn.college dojo's babysuid exercises"
+description: "short notes for pwn.college dojo's pre-pwn exercises"
 ---
 
 # Intro
 
 My first ever write-ups (woohoo)!
 
-This page will have short notes on each level of pwn.college's Program Misues module exercises, babysuid.
+The first half of this page will have short notes on each level of pwn.college's Program Misues module exercises, babysuid.
 The module is about privilege escalation. Each level will let me use one program with unnecessary SUID, and I will have to *abuse* that program to read **/flag** using the root privileges. 
 
 Let's get started then!
@@ -589,3 +589,102 @@ Final level! However, I did not understand the mechanism behind this level as I 
 ## Final Notes
 
 I got to learn many new Linux commands and utilities in this module. This gave me a rough idea on how hackers could go on to abuse the SUID for *privilege escalation*. With this knowledge gained, let's step forward to the next unit, Assemblies! 
+
+## embryoasm
+
+The next 23 challenges consist of x86-64 Assembly challenges. I will have to write an Assembly code to do what each level asks of me and convert the code into byte format. Let's get hacking!
+
+### level1
+
+This level requires us to change the value of `rdi` register to `0x1337`. Let us use the Intel syntax and write the required Assembly code.
+
+```asm
+//name: l1.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rdi, 0x1337
+```
+
+The above code simply puts the value `0x1337` into `rdi`. We will now compile the code and `objcopy` the executable to get the binary.
+
+```bash
+gcc -nostdlib --static -o l1.elf l1.s
+objcopy --dump-section .text=l1.bin l1.elf
+```
+
+Now let's send the contents of `l1.bin` to our challenge executable.
+
+```bash
+cat l1.bin | /challenge/$HOSTNAME
+```
+
+### level2
+
+This level requires us to add `0x331337` to `rdi` register. We can do this simply by using `add` instruction.
+
+```asm
+//name: l2.s
+.global _start
+.intel_syntax noprefix
+_start:
+    add rdi, 0x331337
+```
+
+From now on, after I write the necessary ASM code, assume that I run the same steps as `level1` and send the bytes to the challenge executable. 
+
+### level3
+
+This level requires us to emulate a following equation: `mx + b`, where `m = rdi`, `x = rsi`, and `b = rdx`. I will multiply `rdi` and `rsi`, storing the result in `rsi` and add `rdx` to `rsi`. Finally, I will move `rsi` to `rax` just like how the level requires.
+
+```asm
+//name: l3.s
+.global _start
+.intel_syntax noprefix
+_start:
+    imul rsi, rdi
+    add rsi, rdx
+    mov rax, rsi
+```
+
+### level4
+
+This level requires us to simply divide `rdi` by `rsi`. Dividing in x86-64 Assembly works a little differently. We first have to store the dividend into `rax` and call `div reg2`, where `reg2` is a divisor. The result is stored in `rax` and the remainder in `rdx`. 
+
+```asm
+//name: l4.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rax, rdi
+    div rsi
+```
+
+### level5
+
+This level is similar as the above, but remainders this time! 
+
+```asm
+//name: l5.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rax, rdi
+    div rsi
+    mov rax, rdx
+```
+
+### level6
+
+This level requires me to do modulus operation again but with only using `mov`! Do not panick however. The divisors are each `256` and `65536`, which are very special numbers. They are powers of `16`. Therefore, modulus by them means we are just getting the last 8-bit and 16-bit digits of the registers. We can access them by using lower-bit compatible registers. This is similar to how `5678 % 100` is just `78`. 
+
+```asm
+//name: l6.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rax, 0
+    mov al, dil
+    mov rbx, 0
+    mov bx, si
+```
