@@ -688,3 +688,370 @@ _start:
     mov rbx, 0
     mov bx, si
 ```
+
+### level7
+
+This level wants me to set `rax` to `rdi`'s 4th least significant *byte*. 
+
+We can achieve so with shifting the bytes. Since 1 byte = 8 bits:
+
+```asm
+//name: l7.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rax, rdi
+    shl rax, 16
+    shl rax, 16
+    shr rax, 16
+    shr rax, 16
+    shr rax, 16
+    shr rax, 8
+```
+
+This will shift left until 4th least sig-byte, and shift back to right to only leave the 4th least sig-byte.
+
+### level8
+
+This level wants me to store the result of `rdi AND rsi` into `rax`, without using `mov` and `xchg`.
+
+We can do this by abusing the fact that using `AND` with `0` resets any number to `0`. And `OR` with a register with `0` will simply copy the other value into that register. 
+
+```asm
+//name: l8.s
+.global _start
+.intel_syntax noprefix
+_start:
+    AND rax, 0
+    AND rdi, rsi
+    OR rax, rdi
+```
+
+### level9
+
+Instruction:
+
+```
+if x is even then
+  y = 1
+else
+  y = 0
+where:
+x = rdi
+y = rax
+```
+
+`XOR` is the key here. 
+
+```asm
+//name: l9.s
+.global _start
+.intel_syntax noprefix
+_start:
+    AND rax, 0
+    AND rdi, 1
+    XOR rdi, 1
+    OR rax, rdi
+```
+
+### level10
+
+Instruction:
+
+```
+1. Place the value stored at 0x404000 into rax
+2. Increment the value stored at the address 0x404000 by 0x1337
+Make sure the value in rax is the original value stored at 0x404000 and make sure 
+that [0x404000] now has the incremented value
+```
+
+This level is about deferencing. We are interested in the value stored at the memory location `0x404000` and we can access it by `[0x404000]`. The compiler was not happy when I tried to increment the value at `[0x404000]` directly, so I had to do the arithmetic at `rsi`.
+
+```asm
+//name: l10.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rax, [0x404000]
+    mov rsi, rax
+    add rsi, 0x1337
+    mov [0x404000], rsi
+```
+
+### level11
+
+Reference: https://web.stanford.edu/class/archive/cs/cs107/cs107.1206/guide/x86-64.html
+
+Instruction:
+
+```
+Please perform the following:
+1) Set rax to the byte at 0x404000
+2) Set rbx to the word at 0x404000
+3) Set rcx to the double word at 0x404000
+4) Set rdx to the quad word at 0x404000
+```
+
+We can do this easily by using lower-bit registers. 
+
+```asm
+//name: l11.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov al, [0x404000]
+    mov bx, [0x404000]
+    mov ecx, [0x404000]
+    mov rdx, [0x404000]
+```
+
+### level12
+
+Instruction:
+
+```
+For this challenge we will give you two addresses created dynamically each run. The first address
+will be placed in rdi. The second will be placed in rsi.
+Using the earlier mentioned info, perform the following:
+1. set [rdi] = 0xDEADBEEF00001337
+2. set [rsi] = 0x000000C0FFEE0000
+Hint: it may require some tricks to assign a big constant to a dereferenced register. Try setting
+a register to the constant than assigning that register to the derefed register.
+```
+
+Another deferencing problem. Just like what the instruction warns, I had to use another register to move the large constants
+
+```asm
+//name: l12.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rax, 0xDEADBEEF00001337
+    mov [rdi], rax
+
+    mov rax, 0x000000C0FFEE0000
+    mov [rsi], rax
+```
+
+### level13
+
+Instruction:
+
+```
+Preform the following:
+1. load two consecutive quad words from the address stored in rdi
+2. calculate the sum of the previous steps quad words.
+3. store the sum at the address in rsi
+```
+
+We can use offset referencing. `+8` to the address of `rdi` will get the next `QUAD WORD`. 
+
+```asm
+//name: l13.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rax, [rdi+8]
+    add rax, [rdi]
+    mov [rsi], rax
+```
+
+### level14
+
+Instruction:
+
+```
+Subtract rdi from the top value on the stack.
+```
+
+Stack is where temporary variables are stored during the runtime. The top of the stack is accessible with `rsp` pointer. 
+
+```asm
+//name: l14.s
+.global _start
+.intel_syntax noprefix
+_start:
+    sub [rsp], rdi
+```
+
+### level15
+
+Instruction:
+
+```
+Using only following instructions:
+push, pop
+Swap values in rdi and rsi.
+i.e.
+If to start rdi = 2 and rsi = 5
+Then to end rdi = 5 and rsi = 2
+```
+
+Here is my approach: I will first push both values to the stack. Then, I will pop from the stack in the same order. Due to the LIFO nature, the values popped will come out in the reversed order. 
+
+```asm
+//name: l15.s
+.global _start
+.intel_syntax noprefix
+_start:
+    push rdi
+    push rsi
+    pop rdi
+    pop rsi
+```
+
+### level16
+
+Instruction:
+
+```
+Without using pop please calculate the average of 4 consecutive quad words stored on the stack.
+Store the average on the top of the stack. Hint:
+RSP+0x?? Quad Word A
+RSP+0x?? Quad Word B
+RSP+0x?? Quad Word C
+RSP      Quad Word D
+RSP-0x?? Average
+```
+
+Another thing to note is that the stack grows DOWN. So we will have to add the offsets instead of subtracting them. 
+
+```asm
+//name: l16.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rax, 0
+    add rax, [rsp]
+    add rax, [rsp+8]
+    add rax, [rsp+16]
+    add rax, [rsp+24]
+    mov rsi, 4
+    div rsi
+    push rax
+```
+
+### level17
+
+Instruction:
+
+```
+Using the above knowledge, perform the following:
+Create a two jump trampoline:
+1. Make the first instruction in your code a jmp
+2. Make that jmp a relative jump to 0x51 bytes from its current position
+3. At 0x51 write the following code:
+4. Place the top value on the stack into register rdi
+5. jmp to the absolute address 0x403000
+```
+
+The key here is to use `nop` `0x51` times to write instructions to `0x51` bytes from the current position. 
+
+```asm
+//name: l17.s
+.global _start
+.intel_syntax noprefix
+_start:
+    jmp star
+    .rept 0x51
+    nop
+    .endr
+star:
+    pop rdi
+    mov rax, 0x403000
+    jmp rax
+```
+
+### level18
+
+Instruction:
+
+```
+Using the above knowledge, implement the following:
+if [x] is 0x7f454c46:
+   y = [x+4] + [x+8] + [x+12]
+else if [x] is 0x00005A4D:
+   y = [x+4] - [x+8] - [x+12]
+else:
+   y = [x+4] * [x+8] * [x+12]
+
+where:
+x = rdi, y = rax. Assume each dereferenced value is a signed dword. This means the values can start asa negative value at each memory position.
+A valid solution will use the following at least once:
+jmp (any variant), cmp
+```
+
+This was a long one. I had to be mindful of the fact that we are dealing with `dword`. However, I got the hang of a Assembly coding style. 
+
+```asm
+//name: l18.s
+.global _start
+.intel_syntax noprefix
+_start:
+    cmp dword ptr[rdi], 0x7f454c46
+    jne elseif
+if:
+    mov rax, 0
+    add eax, dword ptr [rdi+4]
+    add eax, dword ptr [rdi+8]
+    add eax, dword ptr [rdi+12]
+    jmp post
+elseif:
+    cmp dword ptr[rdi], 0x00005A4D
+    jne else
+    mov rax, 0
+    add eax, dword ptr [rdi+4]
+    sub eax, dword ptr [rdi+8]
+    sub eax, dword ptr [rdi+12]
+    jmp post
+else:
+    mov rax, 0
+    add eax, dword ptr [rdi+4]
+    imul eax, dword ptr [rdi+8]
+    imul eax, dword ptr [rdi+12]
+    jmp post
+post:
+    nop
+```
+
+### level19
+
+Instruction:
+
+```
+Using the above knowledge, implement the following logic:
+if rdi is 0:
+    jmp 0x403058
+else if rdi is 1:
+    jmp 0x4030c9
+else if rdi is 2:
+    jmp 0x403102
+else if rdi is 3:
+    jmp 0x403165
+else:
+    jmp 0x4031a9
+Please do the above with the following constraints:
+- assume rdi will NOT be negative
+- use no more than 1 cmp instruction
+- use no more than 3 jumps (of any variant)
+- we will provide you with the number to 'switch' on in rdi.
+- we will provide you with a jump table base address in rsi.
+```
+
+The addess will be stored in `rsi` to prevent us from cheating by hardcoding. In the address table, each address reference goes up by 1 byte. We can use pointer arithmetic to access them. If `rdi` is less than or equal to 3, we can do `[rsi + 0x8 * rdi]`. If not, we just do `[rsi + 0x8 * 4]`. 
+
+```
+//name: l19.s
+.global _start
+.intel_syntax noprefix
+_start:
+    cmp rdi, 3
+    jg else
+    mov rax, 0x8
+    imul rax, rdi
+    add rax, rsi
+    jmp [rax]
+else:
+    jmp [rsi + 0x8 * 4]
+```
+
