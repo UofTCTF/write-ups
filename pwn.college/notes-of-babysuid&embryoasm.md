@@ -1055,3 +1055,219 @@ else:
     jmp [rsi + 0x8 * 4]
 ```
 
+### level20
+
+Instruction:
+
+```
+Please compute the average of n consecutive quad words, where:
+rdi = memory address of the 1st quad word
+rsi = n (amount to loop for)
+rax = average computed
+```
+
+There was a typo in the instruction. There are n consecutive `double words`, not quad. I had to refer to the office hour video to address the issue. Other than that, another `jmp` level. We jump to the end to divide once the gate keep variable becomes bigger than `rsi`. Note that I first add the value from the array to `ebx` first and then add `rbx` (64-bit version of `ebx`) to `rax` to make use of the extended 64-bit digits. 
+
+```asm
+//name: l20.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rax, 0  
+    mov r12, 1 
+loop:
+    cmp r12, rsi
+    jg out
+    mov rbx, 0
+    mov ebx, dword ptr [rdi]
+    add rax, rbx
+    add rdi, 0x4
+    add r12, 1
+    jmp loop
+out:
+    div rsi
+```
+
+### level21
+
+Instruction:
+
+```
+Using the above knowledge, please perform the following:
+Count the consecutive non-zero bytes in a contiguous region of memory, where:
+rdi = memory address of the 1st byte
+rax = number of consecutive non-zero bytes
+Additionally, if rdi = 0, then set rax = 0 (we will check)!
+An example test-case, let:
+rdi = 0x1000
+[0x1000] = 0x41
+[0x1001] = 0x42
+[0x1002] = 0x43
+[0x1003] = 0x00
+then: rax = 3 should be set
+```
+
+We simply iterate through the array until we see a 0 byte. Since we are dealing with bytes, we will use a lower 8-bit register to keep track of the bytes.
+
+```asm
+//name: l21.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rax, 0
+loop:
+    mov sil, [rdi]
+    cmp sil, 0
+    je done
+    add rax, 1
+    add rdi, 1
+    jmp loop
+done:
+    nop
+```
+
+### level22
+
+Instruction:
+
+```
+str_lower(src_addr):
+    rax = 0
+    if src_addr != 0:
+        while [src_addr] != 0x0:
+            if [src_addr] <= 90:
+                [src_addr] = foo([src_addr])
+                rax += 1
+            src_addr += 1
+foo is provided at 0x403000. foo takes a single argument as a value
+```
+
+This level is about `call` and `ret`. Because running `foo` function at the given memory location might change our register values, we have to store our current `rax` and `rdi` onto the stack as well. Another thing to note is that we are dealing with bytes again, so use the lower 8-bit registers when applicable.
+
+```asm
+//name: l21.s
+.global _start
+.intel_syntax noprefix
+_start:
+    mov rax, 0
+    cmp rdi, 0
+    je done
+while:
+    mov sil, [rdi]
+    cmp sil, 0
+    je done
+    cmp sil, 90
+    jg finally
+    mov rcx, 0x403000
+    push rax
+    push rdi
+    mov rdi, [rdi]
+    call rcx
+    pop rdi
+    mov [rdi], al
+    pop rax
+    add rax, 1
+finally:
+    add rdi, 1
+    jmp while
+done:
+    ret
+```
+
+### level23
+
+Last level of assembly challenges!
+
+Instruction:
+
+```
+most_common_byte(src_addr, size):
+    b = 0
+    i = 0
+    for i <= size-1:
+        curr_byte = [src_addr + i]
+        [stack_base - curr_byte] += 1
+    b = 0
+
+    max_freq = 0
+    max_freq_byte = 0
+    for b <= 0xff:
+        if [stack_base - b] > max_freq:
+            max_freq = [stack_base - b]
+            max_freq_byte = b 
+
+    return max_freq_byte
+
+Assumptions:
+- There will never be more than 0xffff of any byte
+- The size will never be longer than 0xffff
+- The list will have at least one element
+Constraints:
+- You must put the "counting list" on the stack
+- You must restore the stack like in a normal function
+- You cannot modify the data at src_addr
+```
+
+Capstone challenge. Couple things to note:
+
+- when comparing `b` with `0xff`, I had to use 16-bit to prevent overflows. 
+
+- Allocate enough space in stack, I just subtracted the base by `0xffff` to be sufficient.
+
+- first two arguments are stored in `rdi` and `rsi`.
+
+- Make sure to follow the x64 stack call convention.
+
+- Although the instruction does not specify, assume that we increment `i` and `b` by `1` at the end of each loop.
+
+- Mostly operate in lower 8-bit registers
+
+- Store the return value in `rax`.
+
+Those were all the things I had to watch out for. 
+
+```asm
+//name: l23.s
+.global _start
+.intel_syntax noprefix
+_start:
+    push rbp
+    mov rbp, rsp
+    sub rsp, 0xffff
+    mov rdx, 0 ;b = 0
+    mov rcx, 0 ;i = 0
+for1:
+    mov r12, rsi
+    sub r12, 1
+    cmp rcx, r12 
+    jg final1
+    mov r8b, [rdi+rcx]
+    mov r12, rbp
+    sub r12, r8
+    add byte ptr [r12], 1
+    add rcx, 1
+    jmp for1
+final1:
+    mov rdx, 0  
+    mov r9, 0  
+    mov r10, 0  
+for2:
+    cmp dx, 0xff
+    jg out
+    mov r12, rbp
+    sub r12, rdx
+    cmp byte ptr [r12], r9b
+    jle final2
+    mov r9b, byte ptr [r12]
+    mov r10w, dx
+final2:
+    add dx, 1
+    jmp for2
+out:
+    mov al, r10b
+    mov rsp, rbp
+    pop rbp
+    ret
+```
+
+
