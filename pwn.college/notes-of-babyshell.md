@@ -298,3 +298,36 @@ skip:
 ### level10
 
 This level will sort my shellcode. Thing is tho... using the code from `level9` still worked here too since the code was already somehow sorted. That made my life easier!
+
+### level11
+
+The constraints are same as `level10`
+
+### level12
+
+This challenge requires my shellcodes' bytes to be all unique. My original `chmod` code failed, so investigating the bytes with `objdump` showed me that there were 2 `66` bytes. One of them was inevitable as it was an ascii character that represents `f`. Doing a little experiment and using `push` got rid of the other `66` byte.
+
+```asm
+    push 0x0066
+    mov al, 90
+    mov rdi, rsp
+    mov sil, 7
+    syscall
+```
+
+### level13
+
+This challenge will only take in `0xc` bytes of shellcode now! Which are only 12 bytes. But again, my `chmod` shellcode was already extremely short and I passed through it easily.
+
+### level14
+
+Last level! Now it will only take in `6` bytes of shellcode. No syscall can fit into such small number of bytes. This calls for a `multi-stage` shellcode. We will inject another shellcode that does the dirty deeds after the first one. Using `gdb` shows that `rax` is set to 0 when the shellcode is ran. Using this fact, we can reduce the length of our first shellcode to this:
+
+```asm
+    push rdx
+    pop rsi
+    xor edi, edi
+    syscall
+```
+
+This will call `read` and we will read in the bytes of our shellcode that actually changes the permissino on `/flag` like we always did. I won't get into the specifics here and leave the rest to the readers as a challenge.
