@@ -331,3 +331,14 @@ Last level! Now it will only take in `6` bytes of shellcode. No syscall can fit 
 ```
 
 This will call `read` and we will read in the bytes of our shellcode that actually changes the permissino on `/flag` like we always did. I won't get into the specifics here and leave the rest to the readers as a challenge.
+
+## babyjail
+
+This level is about sandboxing! The program will try to contain me into a session where I do not have privileges so I will try to escape the jails. 
+
+### level1
+
+We can only read one file in the jail. We can easily bypass this by reading `../../flag`.
+
+### level2
+
