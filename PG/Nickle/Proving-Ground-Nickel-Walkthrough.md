@@ -145,4 +145,3 @@ We can easily grab the proof.txt file.
 
 ![](/posts/write-ups/PG/Nickle/Proving-Ground-Nickel-Walkthrough/2022-06-18-18-06-10.png)
 
-Time cost: 2 hours 30 minutes
