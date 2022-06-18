@@ -2,6 +2,7 @@
 title: Proving-Ground-Nickel-Walkthrough
 author: "RealFakeAccount"
 date: "2022-06-18"
+description: "Proving Ground Nickel Walkthrough"
 ---
 
 # Nickel
