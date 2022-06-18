@@ -2,7 +2,6 @@
 title: Proving-Ground-Nickel-Walkthrough
 author: "RealFakeAccount"
 date: "2022-06-18"
-tags: ProvingGround
 ---
 
 # Nickel
@@ -84,7 +83,7 @@ Content-Length: 5
 test
 ```
 
-![](./Proving-Ground-Nickel-Walkthrough/2022-06-18-17-14-13.png)
+![](/posts/write-ups/PG/Nickle/Proving-Ground-Nickel-Walkthrough/2022-06-18-17-14-13.png)
 
 We get not implemented.
 
@@ -100,7 +99,7 @@ It didn't work.
 
 But if we request another resource, `/list-running-procs`, it works.
 
-![](./Proving-Ground-Nickel-Walkthrough/2022-06-18-17-17-09.png)
+![](/posts/write-ups/PG/Nickle/Proving-Ground-Nickel-Walkthrough/2022-06-18-17-17-09.png)
 
 We can see here we have a password passed through command line.
 
@@ -110,7 +109,7 @@ We can login through ssh using the credential we found: `ariah:NowiseSloopTheory
 
 Finally, we can find local.txt on the ariah's Desktop.
 
-![](./Proving-Ground-Nickel-Walkthrough/2022-06-18-17-19-22.png)
+![](/posts/write-ups/PG/Nickle/Proving-Ground-Nickel-Walkthrough/2022-06-18-17-19-22.png)
 
 ## Privilege Escalation
 
@@ -126,11 +125,11 @@ We crack it with john. First use `pdf2john` to generate hash, then use `john` an
 
 the password is `ariah4168`.
 
-![](./Proving-Ground-Nickel-Walkthrough/2022-06-18-18-08-01.png)
+![](/posts/write-ups/PG/Nickle/Proving-Ground-Nickel-Walkthrough/2022-06-18-18-08-01.png)
 
 A `Temporary Command endpoint` exists on the server.
 
-![](./Proving-Ground-Nickel-Walkthrough/2022-06-18-18-02-55.png)
+![](/posts/write-ups/PG/Nickle/Proving-Ground-Nickel-Walkthrough/2022-06-18-18-02-55.png)
 
 We also find that the 80 port is actually open. I suspect it's only accessable from internal network. That's why we didn't see it in the nmap scan.
 
@@ -140,10 +139,10 @@ Tunnel through using ssh:
 ssh -N -L 0.0.0.0:80:192.168.121.99:80 ariah@192.168.121.99
 ```
 
-![](./Proving-Ground-Nickel-Walkthrough/2022-06-18-18-04-16.png)
+![](/posts/write-ups/PG/Nickle/Proving-Ground-Nickel-Walkthrough/2022-06-18-18-04-16.png)
 
 We can easily grab the proof.txt file.
 
-![](./Proving-Ground-Nickel-Walkthrough/2022-06-18-18-06-10.png)
+![](/posts/write-ups/PG/Nickle/Proving-Ground-Nickel-Walkthrough/2022-06-18-18-06-10.png)
 
 Time cost: 2 hours 30 minutes
