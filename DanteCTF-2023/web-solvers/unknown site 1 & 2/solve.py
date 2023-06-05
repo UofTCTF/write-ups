@@ -57,7 +57,8 @@ def get_second_flag():
             except Exception as e:
                 print(f"Error visiting {link}: {e}")
         flag = urllib.parse.unquote(
-            list(filter(lambda c: "DANTE" in c, unique_cookies))[0].split("=")[1]
+            list(filter(lambda c: "DANTE" in c, unique_cookies))[
+                0].split("=")[1]
         )
         print(f"Second flag: {flag}")
     except Exception as e:
@@ -65,6 +66,9 @@ def get_second_flag():
 
 
 def main():
+    """
+    Exploit! :)
+    """
     get_first_flag()
     get_second_flag()
 

